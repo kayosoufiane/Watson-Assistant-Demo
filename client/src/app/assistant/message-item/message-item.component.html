@@ -1,0 +1,27 @@
+<nz-list-item>
+  <span class="message bot" *ngIf="message.text === '...'; else display">
+    <div id="wave">
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </div>
+  </span>
+
+  <img *ngIf="message.sentBy === 'user'" height="30px" src="assets/avatars/user-avatar.png" style="align-self: flex-end">
+  <ng-template #display>
+    <span class="message" [ngClass]="message.sentBy === 'user' ? 'user' : 'bot'" [nzTitle]="message.sentBy === 'watson' ? tooltip : ''" nzPlacement="topLeft" nz-tooltip>{{ message.text }}</span>
+  </ng-template>
+  <img *ngIf="message.sentBy === 'watson' || message.sentBy === 'discovery'" height="30px" src="assets/avatars/watson-logo-avatar.png">
+
+  <div *ngIf="message.sentBy === 'discovery' && message.text != '...'" class="payload">
+    <i>Document: </i> <b>{{ message.title }}</b>
+    <br>
+    <i>URL: </i> <a href="{{ message.url }}" target="_blank">{{ message.url }}</a>
+  </div>
+
+  <ng-template #tooltip>
+    This message is not what you expected ? <br>
+    <button class="tooltip-button" nz-button nzType="default" (click)="sendFeedback()">Tell Us</button>
+  </ng-template>
+
+</nz-list-item>

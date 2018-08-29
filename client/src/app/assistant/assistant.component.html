@@ -1,0 +1,10 @@
+<div nz-row class="container">
+  <nz-card *ngIf="displayChat" [@slideInOut] class="card" nz-col nzXs="24" nzSm="18" nzMd="14" nzLg="12" nzXl="8">
+    <app-header></app-header>
+    <app-message-list [messages]="messages"></app-message-list>
+    <app-message-form [(firstDisplayed)]="firstDisplayed" [messages]="messages" [message]="message"></app-message-form>
+  </nz-card>
+  <div class="button" (click)="onClick()">
+    <i class="icon anticon anticon-message"></i>
+  </div>
+</div>

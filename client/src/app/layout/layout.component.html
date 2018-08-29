@@ -1,0 +1,16 @@
+<nz-layout class="layout">
+  <nz-sider nzCollapsible [(nzCollapsed)]="isCollapsed" [nzBreakpoint]="'md'">
+    <app-sider [isCollapsed]="isCollapsed"></app-sider>
+  </nz-sider>
+  <nz-layout>
+    <nz-header class="header">
+      <app-header [(isCollapsed)]="isCollapsed"></app-header>
+    </nz-header>
+    <nz-content class="content">
+      <app-content></app-content>
+    </nz-content>
+    <nz-footer>
+      <app-footer></app-footer>
+    </nz-footer>
+  </nz-layout>
+</nz-layout>
