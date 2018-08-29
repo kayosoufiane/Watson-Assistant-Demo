@@ -49,3 +49,5 @@ An Node.js/Angular project to use Waston Assistant and other IBM Cloud services
 
 ![BotCreation](images/ScreenCapture.png)
 
+
+The UI uses [**ng-zorro**](https://ng.ant.design/docs/introduce/en) : Ant Design for Angular
