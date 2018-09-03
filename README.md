@@ -43,7 +43,12 @@ An Node.js/Angular project to use Waston Assistant and other IBM Cloud services
     cd client & ng build --prod --env=prod --build-optimizer
     ```
 
-* Place the *dist/* folder in the *server/* folder
+* Place the *dist/* folder generated from the *client/* to the *server/* folder
+
+* In the *server/* folder, run : 
+    ```
+    npm start
+    ````
 
 ## UI
 

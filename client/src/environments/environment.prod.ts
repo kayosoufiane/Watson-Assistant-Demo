@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  url: 'https://watson-assistant-demoapp.eu-gb.mybluemix.net'
+  url: '<Your production URL here>'
 };
