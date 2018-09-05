@@ -10,7 +10,7 @@ An Node.js/Angular project to use Waston Assistant and other IBM Cloud services
 
 * In the client folder :
     * Go to *src/environments*
-    * In the *environment.ts* file, change the url to the one where your server will run in dev
+    * In the *environment.ts* file, change the url to the one where your server will run in dev (ex: http://localhost:8080) 
     * In the *environment.prod.ts* file, change the url to the one where your server will run in prod if needed
  
 
@@ -40,7 +40,7 @@ An Node.js/Angular project to use Waston Assistant and other IBM Cloud services
 
 * Build the client : 
     ```
-    cd client & ng build --prod --env=prod --build-optimizer
+    cd client & ng build --prod --build-optimizer
     ```
 
 * Place the *dist/* folder generated from the *client/* to the *server/* folder
@@ -48,7 +48,7 @@ An Node.js/Angular project to use Waston Assistant and other IBM Cloud services
 * In the *server/* folder, run : 
     ```
     npm start
-    ````
+    ```
 
 ## UI
 
