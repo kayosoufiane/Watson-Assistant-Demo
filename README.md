@@ -50,6 +50,15 @@ An Node.js/Angular project to use Waston Assistant and other IBM Cloud services
     npm start
     ```
 
+## Run using Docker Compose 
+
+```
+docker-compose up
+```
+
+And open *http://localhost:80*
+
+
 ## UI
 
 ![BotCreation](images/ScreenCapture.png)
