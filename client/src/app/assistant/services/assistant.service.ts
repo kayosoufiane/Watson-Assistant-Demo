@@ -14,14 +14,14 @@ const httpOptions = {
 })
 export class AssistantService {
 
-  host = environment.url;
+  // host = environment.url;
   path = '/api/assistant/message';
 
-  url = this.host + this.path;
+  // url = this.host + this.path;
 
   constructor(private http: HttpClient) { }
 
   message(text: string, context: Context): Observable<AssistantResponse> {
-    return this.http.post<AssistantResponse>(this.url, {message: text, context: context}, httpOptions);
+    return this.http.post<AssistantResponse>(this.path, {message: text, context: context}, httpOptions);
   }
 }

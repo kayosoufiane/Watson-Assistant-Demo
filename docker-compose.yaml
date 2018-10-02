@@ -1,0 +1,14 @@
+version: '3'
+services: 
+
+  api:
+    build: server/
+    ports: 
+      - 8080:8080
+    
+  client-angular:
+    build: client/
+    ports: 
+      - 80:80
+    links:
+      - api:apiserver
