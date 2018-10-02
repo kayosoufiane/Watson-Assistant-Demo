@@ -15,15 +15,15 @@ const httpOptions = {
 })
 export class CloudantService {
 
-  // host = environment.url;
+  host = environment.url;
   path = '/api/cloudant/';
 
-  // url = this.host + this.path;
+  url = this.host + this.path;
 
   constructor(private http: HttpClient) { }
 
   addDocument(message: Message): Observable<CloudantResponse> {
-    return this.http.post<CloudantResponse>(this.path + 'newIntent', message, httpOptions);
+    return this.http.post<CloudantResponse>(this.url + 'newIntent', message, httpOptions);
   }
 
 }
