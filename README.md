@@ -52,6 +52,8 @@ An Node.js/Angular project to use Waston Assistant and other IBM Cloud services
 
 ## Run using Docker Compose 
 
+* Replace the url in *environment.prod.ts* with *http://localhost:8080* and run :
+
 ```
 docker-compose up
 ```
