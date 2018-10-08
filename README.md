@@ -54,11 +54,19 @@ An Node.js/Angular project to use Waston Assistant and other IBM Cloud services
 
 * Replace the url in *environment.prod.ts* with *http://localhost:8080* and run :
 
-```
-docker-compose up
-```
+    ```
+    docker-compose up
+    ```
 
 And open *http://localhost:80*
+
+## Run the docker image
+
+* You can also run a docker image the whole application by sharing your *.env* file :
+
+    ```
+    docker run -p 8080:8080 -v <path-to-your-env-file>:/workspace/.env hmatheisen/watson-demo-client
+    ```
 
 
 ## UI

@@ -1,0 +1,10 @@
+# Can be run if the dist/ folder has been moved to the server (cf. README.md)
+FROM node:10-alpine
+RUN mkdir -p /workspace
+WORKDIR /workspace
+COPY package*.json /workspace/
+RUN npm install --silent
+COPY . /workspace
+RUN rm .env
+EXPOSE 8080
+CMD [ "npm", "start" ]
