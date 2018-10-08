@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import { Message, Context, Attachment } from '@app/models';
+import { Message, Context, Attachment, Generic } from '@app/models';
 import { AssistantService } from '@app/assistant/services';
 
 @Component({
@@ -20,6 +20,9 @@ export class MessageFormComponent implements OnInit {
   @Output()
   firstDisplayedChange = new EventEmitter<boolean>();
 
+  @Input()
+  labelClicked;
+
   constructor(private assistantService: AssistantService) {}
 
   ngOnInit() {
@@ -31,7 +34,13 @@ export class MessageFormComponent implements OnInit {
         await this.displayMessage(data.output.text[0]);
       });
     }
+
+    this.labelClicked.subscribe((text) => {
+      this.onLabelClicked(text);
+    });
   }
+
+
 
   sendMessage() {
     // send the user message
@@ -48,15 +57,32 @@ export class MessageFormComponent implements OnInit {
         this.displayDots('discovery');
         await this.displayDiscoveryMessage(data.output.attachment);
       } else {
-        for (const textstr of data.output.text) {
-          this.displayDots('watson');
-          await this.displayMessage(textstr);
+        if (data.output.generic[0].response_type === 'option') {
+          this.displayDots('option');
+          await this.displayOptions(data.output.generic[0]);
+        } else {
+          for (const textstr of data.output.text) {
+            this.displayDots('watson');
+            await this.displayMessage(textstr);
+          }
         }
       }
     });
 
     // Create a new message to clear the input
     this.message = new Message();
+  }
+
+  displayOptions(generic: Generic): Promise<void> {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        this.messages[this.messages.length - 1].text = generic.title;
+        this.messages[this.messages.length - 1].description = generic.description;
+        this.messages[this.messages.length - 1].options = generic.options;
+        this.scroll();
+        resolve();
+      }, generic.title.length * 60 > 3000 ? 3000 : generic.title.length * 60);
+    });
   }
 
   displayDots(sentBy: string): void {
@@ -84,6 +110,11 @@ export class MessageFormComponent implements OnInit {
         resolve();
       }, attachment.title.length * 60 > 3000 ? 3000 : attachment.title.length * 60);
     });
+  }
+
+  onLabelClicked(text: string) {
+    this.message.text = text;
+    this.sendMessage();
   }
 
   scroll() {

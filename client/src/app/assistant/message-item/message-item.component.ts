@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd';
 
 import { Message } from '@app/models';
@@ -12,6 +12,11 @@ import { CloudantService } from '@app/assistant/services';
 export class MessageItemComponent implements OnInit {
   @Input()
   message: Message;
+  @Input()
+  messages: Message[];
+
+  @Output()
+  labelClicked = new EventEmitter<string>();
 
   constructor(private cloudantService: CloudantService, private modalService: NzModalService) { }
 
@@ -34,4 +39,7 @@ export class MessageItemComponent implements OnInit {
     });
   }
 
+  onLabelClicked(text: string) {
+    this.labelClicked.emit(text);
+  }
 }

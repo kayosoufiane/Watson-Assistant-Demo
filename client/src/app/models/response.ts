@@ -33,6 +33,23 @@ export interface Output {
   nodes_visited: string[];
   log_messages: any[];
   attachment?: Attachment;
+  generic: Generic[];
+}
+
+export interface Generic {
+  response_type: string;
+  title: string;
+  options: Option[];
+  description: string;
+}
+
+export interface Option {
+  label: string;
+  value: Value;
+}
+
+export interface Value {
+  input: Input;
 }
 
 export interface Attachment {

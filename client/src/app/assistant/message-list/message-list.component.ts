@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { Message } from '@app/models';
 
@@ -11,9 +11,16 @@ export class MessageListComponent implements OnInit {
   @Input()
   messages: Message[];
 
+  @Output()
+  labelClicked = new EventEmitter<string>();
+
   constructor() { }
 
   ngOnInit() {
+  }
+
+  onLabelClicked(text: string) {
+    this.labelClicked.emit(text);
   }
 
 }

@@ -11,12 +11,22 @@
   <ng-template #display>
     <span class="message" [ngClass]="message.sentBy === 'user' ? 'user' : 'bot'" [nzTitle]="message.sentBy === 'watson' ? tooltip : ''" nzPlacement="topLeft" nz-tooltip>{{ message.text }}</span>
   </ng-template>
-  <img *ngIf="message.sentBy === 'watson' || message.sentBy === 'discovery'" height="30px" src="assets/avatars/watson-logo-avatar.png">
+
+  <img *ngIf="message.sentBy === 'watson' || message.sentBy === 'discovery' || message.sentBy === 'option'" height="30px" src="assets/avatars/watson-logo-avatar.png">
 
   <div *ngIf="message.sentBy === 'discovery' && message.text != '...'" class="payload">
     <i>Document: </i> <b>{{ message.title }}</b>
     <br>
     <i>URL: </i> <a href="{{ message.url }}" target="_blank">{{ message.url }}</a>
+  </div>
+
+  <div *ngIf="message.sentBy === 'option' && message.text != '...'" class="options">
+    <i>{{ message.description }}</i>
+    <ul>
+      <li *ngFor="let option of message.options">
+        <a (click)="onLabelClicked(option.value.input.text)" >{{ option.label }}</a>
+      </li>
+    </ul>
   </div>
 
   <ng-template #tooltip>

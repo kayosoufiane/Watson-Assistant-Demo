@@ -1,3 +1,3 @@
 export { Message } from './message';
-export { AssistantResponse, Context, Attachment } from './response';
+export { AssistantResponse, Context, Attachment, Generic, Option } from './response';
 export { CloudantResponse } from './cloudantResponse';

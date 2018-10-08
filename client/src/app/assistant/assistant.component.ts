@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 
 import { Message } from '@app/models';
 import { trigger, style, animate, transition } from '@angular/animations';
@@ -24,6 +24,7 @@ export class AssistantComponent implements OnInit {
   messages: Message[];
   displayChat = false;
   firstDisplayed = true;
+  labelClicked = new EventEmitter<string>();
 
   constructor() {
     this.message = new Message();
@@ -35,6 +36,10 @@ export class AssistantComponent implements OnInit {
 
   onClick() {
     this.displayChat = !this.displayChat;
+  }
+
+  onLabelClicked(text: string) {
+    this.labelClicked.emit(text);
   }
 
 }
