@@ -4,7 +4,7 @@ const LanguageTranslatorV3 = require('watson-developer-cloud/language-translator
 const languageTranslator = new LanguageTranslatorV3({
     version: '2018-05-01',
     iam_apikey: process.env.LANGUAGE_TRANSLATOR_IAM_API_KEY,
-    url: 'https://gateway.watsonplatform.net/language-translator/api'
+    url: process.env.LANGUAGE_TRANSLATOR_URL,
 });
 
 module.exports = languageTranslator;
