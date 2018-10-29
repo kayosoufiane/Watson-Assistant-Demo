@@ -1,25 +1,118 @@
-const { assistant } = require('../config');
+const { assistant, translator, sourceLanguage } = require('../config');
 
 class AssistantController {
 
     postMessage(body, res) {
-        const payload = {
-            workspace_id: process.env.ASSISTANT_WORKSPACE_ID,
-            input: { 
-                text: String(body.message),
-            },
-            context: body.context,
+        this.getResonse(body.message, body.context)
+        .then(response => {
+            res.status(200).send(response)
+        })
+        .catch(err => {
+            res.status(500).send(err);
+        })
+    }
+
+    postTranslatedMessage(body, res) {
+        let sourceLan;
+
+        this.identifyLanguage(body.message)
+        .then(source => {
+            sourceLan = source;
+            return this.translateLanguage(body.message, source, sourceLanguage);
+        })
+        .then(msg => this.getTranslatedResponse(msg, body.context, sourceLanguage, sourceLan))
+        .then(response => {
+            res.status(200).send(response);
+        })
+        .catch(err => {
+            res.status(500).send(err);
+        })
+    }
+
+    identifyLanguage(msg) {
+        const params = {
+            text: msg
         }
 
-        assistant.message(payload, (err, response) => {
-            if (err) {
-                res.status(500).send(err);
-            }
-            else {
-                res.status(200).send(response);
-            }
+        return new Promise((resolve, reject) => {
+            translator.identify(params, (err, res) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(res.languages[0].language)
+                }
+            });
         });
     }
+
+    translateLanguage(msg, source, target) {
+        const params = {
+            text: msg,
+            source: source,
+            target: target
+        }
+
+        return new Promise((resolve, reject) => {
+            if (source === target) {
+                resolve(msg);
+            }
+            translator.translate(params, (err, res) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(res.translations[0].translation)
+                }
+            });
+        });
+    }
+
+    getResonse(msg, ctx) {
+        const params = {
+            workspace_id: process.env.ASSISTANT_WORKSPACE_ID,
+            input: { 
+                text: String(msg),
+            },
+            context: ctx,
+        }
+
+        return new Promise((resolve, reject) => {
+            assistant.message(params, (err, res) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(res);
+                }
+            });
+        });
+    }
+
+    getTranslatedResponse(msg, ctx, src, trg) {
+        const params = {
+            workspace_id: process.env.ASSISTANT_WORKSPACE_ID,
+            input: { 
+                text: String(msg),
+            },
+            context: ctx,
+        }
+
+        return new Promise((resolve, reject) => {
+            assistant.message(params, (err, res) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    this.translateLanguage(res.output.text[0], src, trg)
+                    .then(translated => {
+                        res.output.text[0] = translated
+                        resolve(res);
+                    })
+                    .catch(err => {
+                        reject(err);
+                    });
+                }
+            });
+        });
+    }
+
 }
 
 module.exports = AssistantController;

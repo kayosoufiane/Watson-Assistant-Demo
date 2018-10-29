@@ -15,7 +15,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use('/', express.static(path.join(__dirname + '/dist/ng-assistant')));
 app.use('/api/assistant', assistantRoutes);
-app.use('/api/visual-recognition', visualRecognitionRoutes);
 app.use('/api/cloudant', cloudantRoutes);
 
 module.exports = app;

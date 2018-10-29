@@ -49,7 +49,7 @@ export class MessageFormComponent implements OnInit {
     this.scroll();
 
     // Get Watson's response from the Assistant Service
-    this.assistantService.message(this.message.text, this.context).subscribe(async data => {
+    this.assistantService.messageTranslator(this.message.text, this.context).subscribe(async data => {
       this.context = data.context;
 
       // If the message is sent by Discovery

@@ -24,4 +24,12 @@ export class AssistantService {
   message(text: string, context: Context): Observable<AssistantResponse> {
     return this.http.post<AssistantResponse>(this.url, {message: text, context: context}, httpOptions);
   }
+
+  messageTranslator(text: string, context: Context): Observable<AssistantResponse> {
+    return this.http.post<AssistantResponse>(
+      this.host + '/api/assistant/message-translator',
+      { message: text, context: context },
+      httpOptions
+    );
+  }
 }
