@@ -15,19 +15,22 @@ const httpOptions = {
 export class AssistantService {
 
   host = environment.url;
-  path = '/api/assistant/message';
-
+  path = '/api/assistant';
   url = this.host + this.path;
 
   constructor(private http: HttpClient) { }
 
   message(text: string, context: Context): Observable<AssistantResponse> {
-    return this.http.post<AssistantResponse>(this.url, {message: text, context: context}, httpOptions);
+    return this.http.post<AssistantResponse>(
+      this.url + '/message',
+      { message: text, context: context },
+      httpOptions
+    );
   }
 
   messageTranslator(text: string, context: Context): Observable<AssistantResponse> {
     return this.http.post<AssistantResponse>(
-      this.host + '/api/assistant/message-translator',
+      this.url + '/message-translator',
       { message: text, context: context },
       httpOptions
     );
