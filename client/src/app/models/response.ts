@@ -41,6 +41,7 @@ export interface Generic {
   title: string;
   options: Option[];
   description: string;
+  source: string;
 }
 
 export interface Option {

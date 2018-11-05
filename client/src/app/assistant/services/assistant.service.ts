@@ -28,6 +28,14 @@ export class AssistantService {
     );
   }
 
+  messageWorkspaces(text: string, context: Context): Observable<AssistantResponse> {
+    return this.http.post<AssistantResponse>(
+      this.url + '/message-workspaces',
+      { message: text, context: context },
+      httpOptions
+    );
+  }
+
   messageTranslator(text: string, context: Context): Observable<AssistantResponse> {
     return this.http.post<AssistantResponse>(
       this.url + '/message-translator',

@@ -29,6 +29,17 @@ class AssistantController {
         })
     }
 
+    postMessageWorkspaces(body, res) {
+        this.identifyLanguage(body.message)
+        .then(source => this.getResponseWorkspaces(body.message, body.context, source))
+        .then(response => {
+            res.status(200).send(response);
+        })
+        .catch(err => {
+            res.status(500).send(err);
+        })
+    }
+
     identifyLanguage(msg) {
         const params = {
             text: msg
@@ -108,6 +119,26 @@ class AssistantController {
                     .catch(err => {
                         reject(err);
                     });
+                }
+            });
+        });
+    }
+
+    getResponseWorkspaces(msg, ctx, source) {
+        const params = {
+            workspace_id: source === 'en' ? process.env.ASSISTANT_WORKSPACE_ID_EN : process.env.ASSISTANT_WORKSPACE_ID,
+            input: { 
+                text: String(msg),
+            },
+            context: ctx,
+        }
+
+        return new Promise((resolve, reject) => {
+            assistant.message(params, (err, res) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(res);
                 }
             });
         });

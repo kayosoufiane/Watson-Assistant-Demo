@@ -49,7 +49,7 @@ export class MessageFormComponent implements OnInit {
     this.scroll();
 
     // Get Watson's response from the Assistant Service
-    this.assistantService.messageTranslator(this.message.text, this.context).subscribe(async data => {
+    this.assistantService.messageWorkspaces(this.message.text, this.context).subscribe(async data => {
       this.context = data.context;
 
       // If the message is sent by Discovery
@@ -57,20 +57,37 @@ export class MessageFormComponent implements OnInit {
         this.displayDots('discovery');
         await this.displayDiscoveryMessage(data.output.attachment);
       } else {
-        if (data.output.generic[0].response_type === 'option') {
-          this.displayDots('option');
-          await this.displayOptions(data.output.generic[0]);
-        } else {
-          for (const textstr of data.output.text) {
-            this.displayDots('watson');
-            await this.displayMessage(textstr);
-          }
+        switch (data.output.generic[0].response_type) {
+          case 'option':
+            this.displayDots('option');
+            await this.displayOptions(data.output.generic[0]);
+            break;
+          case 'text':
+            for (const textstr of data.output.text) {
+              this.displayDots('watson');
+              await this.displayMessage(textstr);
+            }
+            break;
+          case 'image':
+            this.displayDots('image');
+            await this.displayImage(data.output.generic[0].source);
         }
       }
     });
 
     // Create a new message to clear the input
     this.message = new Message();
+  }
+
+  displayImage(source: string): Promise<void> {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        this.messages[this.messages.length - 1].text = 'En voilà une : ';
+        this.messages[this.messages.length - 1].url = source;
+        this.scroll();
+        resolve();
+      }, source.length * 60 > 3000 ? 3000 : source.length * 60);
+    });
   }
 
   displayOptions(generic: Generic): Promise<void> {

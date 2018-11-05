@@ -7,6 +7,10 @@ router.post('/message-translator', (req, res) => {
     assistantController.postTranslatedMessage(req.body, res);
 });
 
+router.post('/message-workspaces', (req, res) => {
+    assistantController.postMessageWorkspaces(req.body, res);
+})
+
 router.post('/message', (req, res) => {
     assistantController.postMessage(req.body, res);
 });
