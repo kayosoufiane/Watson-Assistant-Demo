@@ -168,7 +168,7 @@ class AssistantController {
 
   getImage() {
     return new Promise((resolve, reject) => {
-      http.get("http://9.128.177.44:1880/chatbot_image", res => {
+      http.get("http://localhost:1880/chatbot_image", res => {
         let data = '';
 
         res.on('data', chunk => {
