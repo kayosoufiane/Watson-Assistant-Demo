@@ -1,5 +1,5 @@
 # Can be run if the dist/ folder has been moved to the server (cf. README.md)
-FROM node:10-alpine
+FROM armhf/node:7.8.0
 RUN mkdir -p /workspace
 WORKDIR /workspace
 COPY package*.json /workspace/

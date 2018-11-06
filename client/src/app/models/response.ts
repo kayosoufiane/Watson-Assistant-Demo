@@ -4,6 +4,8 @@ export interface AssistantResponse {
   input: Input;
   output: Output;
   context: Context;
+  image: string;
+  class: string;
 }
 
 export interface Context {

@@ -12,7 +12,7 @@
     <span class="message" [ngClass]="message.sentBy === 'user' ? 'user' : 'bot'" [nzTitle]="message.sentBy === 'watson' ? tooltip : ''" nzPlacement="topLeft" nz-tooltip>{{ message.text }}</span>
   </ng-template>
 
-  <img *ngIf="message.sentBy === 'watson' || message.sentBy === 'discovery' || message.sentBy === 'option' || message.sentBy === 'image'" height="30px" src="assets/avatars/watson-logo-avatar.png">
+  <img *ngIf="message.sentBy === 'watson' || message.sentBy === 'discovery' || message.sentBy === 'option' || message.sentBy === 'image' || message.sentBy === 'classifier'" height="30px" src="assets/avatars/watson-logo-avatar.png">
 
   <div *ngIf="message.sentBy === 'discovery' && message.text != '...'" class="payload">
     <i>Document: </i> <b>{{ message.title }}</b>
@@ -31,6 +31,10 @@
 
   <div *ngIf="message.sentBy === 'image' && message.text != '...'" class="options">
     <img src="{{ message.url }}" height="400px">
+  </div>
+
+  <div *ngIf="message.sentBy === 'classifier' && message.text != '...'" class="options">
+    <img [src]="message.ResourceUrl" height="200px">
   </div>
 
   <ng-template #tooltip>

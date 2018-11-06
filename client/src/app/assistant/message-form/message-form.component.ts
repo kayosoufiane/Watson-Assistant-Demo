@@ -1,12 +1,13 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 
-import { Message, Context, Attachment, Generic } from '@app/models';
-import { AssistantService } from '@app/assistant/services';
+import { Message, Context, Attachment, Generic } from "@app/models";
+import { AssistantService } from "@app/assistant/services";
+import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 
 @Component({
-  selector: 'app-message-form',
-  templateUrl: './message-form.component.html',
-  styleUrls: ['./message-form.component.scss']
+  selector: "app-message-form",
+  templateUrl: "./message-form.component.html",
+  styleUrls: ["./message-form.component.scss"]
 })
 export class MessageFormComponent implements OnInit {
   @Input()
@@ -23,66 +24,84 @@ export class MessageFormComponent implements OnInit {
   @Input()
   labelClicked;
 
-  constructor(private assistantService: AssistantService) {}
+  constructor(private assistantService: AssistantService, private _sanitizer: DomSanitizer) {}
 
   ngOnInit() {
     this.message = new Message();
     if (this.firstDisplayed) {
-      this.assistantService.message('', null).subscribe(async data => {
+      this.assistantService.message("", null).subscribe(async data => {
         this.firstDisplayedChange.emit(false);
-        this.displayDots('watson');
+        this.displayDots("watson");
         await this.displayMessage(data.output.text[0]);
       });
     }
 
-    this.labelClicked.subscribe((text) => {
+    this.labelClicked.subscribe(text => {
       this.onLabelClicked(text);
     });
   }
 
-
-
   sendMessage() {
     // send the user message
-    this.message.sentBy = 'user';
+    this.message.sentBy = "user";
     this.messages.push(this.message);
     this.scroll();
 
     // Get Watson's response from the Assistant Service
-    this.assistantService.messageWorkspaces(this.message.text, this.context).subscribe(async data => {
-      this.context = data.context;
+    this.assistantService
+      .messageWorkspaces(this.message.text, this.context)
+      .subscribe(async data => {
+        this.context = data.context;
 
-      // If the message is sent by Discovery
-      if (data.output.attachment) {
-        this.displayDots('discovery');
-        await this.displayDiscoveryMessage(data.output.attachment);
-      } else {
-        switch (data.output.generic[0].response_type) {
-          case 'option':
-            this.displayDots('option');
-            await this.displayOptions(data.output.generic[0]);
-            break;
-          case 'text':
-            for (const textstr of data.output.text) {
-              this.displayDots('watson');
-              await this.displayMessage(textstr);
+        if (data.image && data.class) {
+          this.displayDots("classifier");
+          await this.displayImageAndClassifier(data.image, data.class)
+        } else {
+         // If the message is sent by Discovery
+          if (data.output.attachment) {
+            this.displayDots("discovery");
+            await this.displayDiscoveryMessage(data.output.attachment);
+          } else {
+            switch (data.output.generic[0].response_type) {
+              case "option":
+                this.displayDots("option");
+                await this.displayOptions(data.output.generic[0]);
+                break;
+              case "text":
+                for (const textstr of data.output.text) {
+                  this.displayDots("watson");
+                  await this.displayMessage(textstr);
+                }
+                break;
+              case "image":
+                this.displayDots("image");
+                await this.displayImage(data.output.generic[0].source);
+                break;
             }
-            break;
-          case 'image':
-            this.displayDots('image');
-            await this.displayImage(data.output.generic[0].source);
+          }
         }
-      }
-    });
+      });
 
     // Create a new message to clear the input
     this.message = new Message();
   }
 
+  displayImageAndClassifier(image: string, classifier: string): Promise<void> {
+    const ImagePath: SafeResourceUrl = this._sanitizer.bypassSecurityTrustResourceUrl('data:image/jpg;base64,' + image);
+    return new Promise(resolve => {
+      setTimeout(() => {
+        this.messages[this.messages.length - 1].text = classifier;
+        this.messages[this.messages.length - 1].ResourceUrl = ImagePath;
+        this.scroll();
+        resolve();
+      }, classifier.length * 60 > 3000 ? 3000 : classifier.length * 60)
+    })
+  }
+
   displayImage(source: string): Promise<void> {
     return new Promise(resolve => {
       setTimeout(() => {
-        this.messages[this.messages.length - 1].text = 'En voilà une : ';
+        this.messages[this.messages.length - 1].text = "Et voilà : ";
         this.messages[this.messages.length - 1].url = source;
         this.scroll();
         resolve();
@@ -103,7 +122,7 @@ export class MessageFormComponent implements OnInit {
   }
 
   displayDots(sentBy: string): void {
-    this.messages.push(new Message('...', sentBy));
+    this.messages.push(new Message("...", sentBy));
     this.scroll();
   }
 
@@ -120,7 +139,7 @@ export class MessageFormComponent implements OnInit {
   displayDiscoveryMessage(attachment: Attachment): Promise<void> {
     return new Promise(resolve => {
       setTimeout(() => {
-        this.messages[this.messages.length - 1].text = 'Voici ce que j\'ai trouvé dans ma base documentaire';
+        this.messages[this.messages.length - 1].text = "Voici ce que j'ai trouvé dans ma base documentaire";
         this.messages[this.messages.length - 1].url = attachment.url;
         this.messages[this.messages.length - 1].title = attachment.title;
         this.scroll();
@@ -135,13 +154,12 @@ export class MessageFormComponent implements OnInit {
   }
 
   scroll() {
-    const messages = document.getElementById('scroll');
+    const messages = document.getElementById("scroll");
     setTimeout(() => {
       messages.scrollTo({
         top: messages.scrollHeight,
-        behavior: 'smooth'
+        behavior: "smooth"
       });
     }, 100);
   }
-
 }

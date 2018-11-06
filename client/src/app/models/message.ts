@@ -1,4 +1,5 @@
 import { Option } from '@app/models';
+import { SafeResourceUrl } from "@angular/platform-browser";
 
 export class Message {
   text: string;
@@ -6,6 +7,7 @@ export class Message {
   emotion: string;
   intent: string;
   url: string;
+  ResourceUrl: SafeResourceUrl;
   title: string;
   description: string;
   options: Option[];

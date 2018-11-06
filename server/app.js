@@ -3,7 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const path = require('path')
 
-const { assistantRoutes, visualRecognitionRoutes, cloudantRoutes } = require('./routes');
+const { assistantRoutes, cloudantRoutes } = require('./routes');
 
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");

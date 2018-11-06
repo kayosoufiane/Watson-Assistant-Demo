@@ -22,7 +22,7 @@ export class AssistantService {
 
   message(text: string, context: Context): Observable<AssistantResponse> {
     return this.http.post<AssistantResponse>(
-      this.url + '/message',
+      this.path + '/message',
       { message: text, context: context },
       httpOptions
     );
@@ -30,7 +30,7 @@ export class AssistantService {
 
   messageWorkspaces(text: string, context: Context): Observable<AssistantResponse> {
     return this.http.post<AssistantResponse>(
-      this.url + '/message-workspaces',
+      this.path + '/message-workspaces',
       { message: text, context: context },
       httpOptions
     );
@@ -38,9 +38,13 @@ export class AssistantService {
 
   messageTranslator(text: string, context: Context): Observable<AssistantResponse> {
     return this.http.post<AssistantResponse>(
-      this.url + '/message-translator',
+      this.path + '/message-translator',
       { message: text, context: context },
       httpOptions
     );
+  }
+
+  getImage(): Observable<Object> {
+    return this.http.get<Object>('http://9.128.177.44:1880/chatbot_image', httpOptions);
   }
 }
