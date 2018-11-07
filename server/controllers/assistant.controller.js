@@ -168,7 +168,7 @@ class AssistantController {
 
   getImage() {
     return new Promise((resolve, reject) => {
-      http.get("http://localhost:1880/chatbot_image", res => {
+      http.get(process.env.TJBOT_IP + "/chatbot_image", res => {
         let data = '';
 
         res.on('data', chunk => {
