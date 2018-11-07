@@ -34,7 +34,7 @@ class AssistantController {
 
   postMessageWorkspaces(body, res) {
     this.identifyLanguage(body.message)
-      .then(source =>
+      .then(source => 
         this.getResponseWorkspaces(body.message, body.context, source)
       )
       .then(response => {
@@ -132,9 +132,9 @@ class AssistantController {
   getResponseWorkspaces(msg, ctx, source) {
     const params = {
       workspace_id:
-        source === "en"
+        (source === "en"
           ? process.env.ASSISTANT_WORKSPACE_ID_EN
-          : process.env.ASSISTANT_WORKSPACE_ID,
+          : process.env.ASSISTANT_WORKSPACE_ID) || process.env.ASSISTANT_WORKSPACE_ID,
       input: {
         text: String(msg)
       },
