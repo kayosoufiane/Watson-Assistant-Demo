@@ -31,6 +31,7 @@ export class MessageFormComponent implements OnInit {
       this.assistantService.message('', null).subscribe(async data => {
         this.firstDisplayedChange.emit(false);
         this.displayDots('watson');
+        this.context = data.context;
         await this.displayMessage(data.output.text[0]);
       });
     }
