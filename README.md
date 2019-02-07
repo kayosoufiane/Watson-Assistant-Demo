@@ -65,7 +65,7 @@ And open *http://localhost:80*
 * You can also run a docker image the whole application by sharing your *.env* file :
 
     ```
-    docker run -p 8080:8080 -v <path-to-your-env-file>:/workspace/.env hmatheisen/watson-demo-client
+    docker run -p 8080:8080 -v <path-to-your-env-file>:/workspace/.env <user>/watson-demo-client
     ```
 
 
